@@ -48,7 +48,7 @@ document.getElementById('rozxid-container').addEventListener('click', (e) => {
 });
 
 document.getElementById('copy-btn').addEventListener('click', () => {
-    const form = document.getElementById('form');
+    const form = document.getElementById('main-form');
     let data = '';
 
     // Проходимо по всім елементам форми
