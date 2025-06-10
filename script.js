@@ -89,6 +89,7 @@ function saveFormData() {
 // Відновлення даних із Local Storage
 function loadFormData() {
     const savedData = localStorage.getItem("formData");
+    console.log(savedData);
     if (savedData) {
         const formData = JSON.parse(savedData);
         document.querySelectorAll("#main-form input, #main-form select").forEach((field) => {
@@ -96,6 +97,27 @@ function loadFormData() {
                 field.value = formData[field.name];
             }
         });
+    }
+    
+    // Set current date if no date is saved
+    const dateInput = document.querySelector('input[name="date"]');
+    if (dateInput && !dateInput.value) {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        dateInput.value = `${year}-${month}-${day}`;
+        saveFormData(); // Save the new date
+    }
+
+    // Set current time if no time is saved
+    const timeInput = document.querySelector('input[name="time"]');
+    if (timeInput && !timeInput.value) {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        timeInput.value = `${hours}:${minutes}`;
+        saveFormData(); // Save the new time
     }
 }
 
