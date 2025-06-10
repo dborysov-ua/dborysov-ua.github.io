@@ -54,7 +54,8 @@ document.getElementById('copy-btn').addEventListener('click', () => {
     // Проходимо по всім елементам форми
     form.querySelectorAll('.row').forEach(row => {
         const label = row.querySelector('label')?.innerText || '';
-        const input = row.querySelector('input, select')?.value || '';
+        const input = (row.querySelector('input, select, textarea')?.value || '').replace(/\n/g, ' ');
+        
         if (input) {
             data += `${label} ${input}\n`;
         }
@@ -79,7 +80,7 @@ document.getElementById('copy-btn').addEventListener('click', () => {
 function saveFormData() {
     const formData = {};
     document.querySelectorAll("#main-form input, #main-form select").forEach((field) => {
-        if (field.name) {  // Only save fields that have names
+        if (field.name && field.name !== "time") {  // Only save fields that have names
             formData[field.name] = field.value;
         }
     });
@@ -89,16 +90,14 @@ function saveFormData() {
 // Відновлення даних із Local Storage
 function loadFormData() {
     const savedData = localStorage.getItem("formData");
-    console.log(savedData);
     if (savedData) {
         const formData = JSON.parse(savedData);
         document.querySelectorAll("#main-form input, #main-form select").forEach((field) => {
-            if (field.name && formData[field.name] !== undefined) {
+            if (field.name && field.name !== "time" && formData[field.name] !== undefined) {
                 field.value = formData[field.name];
             }
         });
     }
-
     const dateInput = document.querySelector('input[name="date"]');
     if (dateInput && !dateInput.value) {
         const today = new Date();
@@ -108,8 +107,6 @@ function loadFormData() {
         dateInput.value = `${year}-${month}-${day}`;
         saveFormData(); // Save the new date
     }
-    const timeInput = document.querySelector('input[name="time"]');
-    timeInput.value = "00:00";
 }
 
 // Додаємо обробник подій для збереження даних при зміні полів
