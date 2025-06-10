@@ -98,6 +98,18 @@ function loadFormData() {
             }
         });
     }
+
+    const dateInput = document.querySelector('input[name="date"]');
+    if (dateInput && !dateInput.value) {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        dateInput.value = `${year}-${month}-${day}`;
+        saveFormData(); // Save the new date
+    }
+    const timeInput = document.querySelector('input[name="time"]');
+    timeInput.value = "00:00";
 }
 
 // Додаємо обробник подій для збереження даних при зміні полів
