@@ -79,7 +79,9 @@ document.getElementById('copy-btn').addEventListener('click', () => {
 function saveFormData() {
     const formData = {};
     document.querySelectorAll("#main-form input, #main-form select").forEach((field) => {
-        formData[field.name] = field.value;
+        if (field.name) {  // Only save fields that have names
+            formData[field.name] = field.value;
+        }
     });
     localStorage.setItem("formData", JSON.stringify(formData));
 }
@@ -90,7 +92,7 @@ function loadFormData() {
     if (savedData) {
         const formData = JSON.parse(savedData);
         document.querySelectorAll("#main-form input, #main-form select").forEach((field) => {
-            if (formData[field.name] !== undefined) {
+            if (field.name && formData[field.name] !== undefined) {
                 field.value = formData[field.name];
             }
         });
@@ -99,8 +101,9 @@ function loadFormData() {
 
 // Додаємо обробник подій для збереження даних при зміні полів
 document.querySelectorAll("#main-form input, #main-form select").forEach((field) => {
+    field.addEventListener("change", saveFormData);
     field.addEventListener("input", saveFormData);
 });
 
 // Завантаження даних при завантаженні сторінки
-window.addEventListener("load", loadFormData);
+document.addEventListener("DOMContentLoaded", loadFormData);
